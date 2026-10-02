@@ -182,5 +182,13 @@
   },
   "releaseNotes": {
     "message": "Release notes"
+  },
+  "lastChecked": {
+    "message": "Last checked: $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1"
+      }
+    }
   }
 }

@@ -182,5 +182,13 @@
   },
   "releaseNotes": {
     "message": "릴리스 노트"
+  },
+  "lastChecked": {
+    "message": "마지막 확인: $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1"
+      }
+    }
   }
 }

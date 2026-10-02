@@ -54,7 +54,8 @@ async function render() {
 }
 
 async function showUpdate() {
-  const { latestVersion, updateAvailable } = await chrome.storage.local.get(["latestVersion", "updateAvailable"]);
+  const { latestVersion, updateAvailable, checkedAt } = await chrome.storage.local.get(["latestVersion", "updateAvailable", "checkedAt"]);
+  if (checkedAt) document.getElementById("checked").textContent = t("lastChecked", [new Date(checkedAt).toLocaleString()]);
   const box = document.getElementById("update");
   box.hidden = !updateAvailable;
   if (updateAvailable) document.getElementById("updateText").textContent = t("updateAvailable", [latestVersion]);
