@@ -179,5 +179,8 @@
   },
   "defSnip4Text": {
     "message": "다음 내용을 번역해 줘. 한국어면 자연스러운 영어로, 영어면 자연스러운 한국어로.\n\n"
+  },
+  "releaseNotes": {
+    "message": "릴리스 노트"
   }
 }

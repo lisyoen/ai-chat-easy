@@ -179,5 +179,8 @@
   },
   "defSnip4Text": {
     "message": "Translate the following. If it is Korean, translate into natural English; if it is English, translate into natural Korean.\n\n"
+  },
+  "releaseNotes": {
+    "message": "Release notes"
   }
 }
