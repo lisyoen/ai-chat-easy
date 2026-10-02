@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+dist/
+build/
+*.log
+.DS_Store
+*.zip
+
+# 사이트 저장본(개인 정보 포함)은 커밋하지 않는다
+sites/
