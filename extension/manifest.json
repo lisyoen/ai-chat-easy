@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "AI Chat Easy",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoOk5+MdOYYEXtf464y8wUs8d5MubjDeLJNYAcL+xhssOLcgOVqP4G9JNRL9GH9cGXr0uoESokA/OCcRp/1jp9yYkrnpCRdKW9Etjkj3Ce0SazFxHrCyufor6ILuf9R7cO7VigPB/jrYsoHTFmn/NRiHgLAJ01LENn+v2NR2oKN+XTEOTWEicDf890bKSX6ZqnUawFPjpMV4nwC4PYrAjajheUhZ2Q06pxq8IRXEgocIwfy+v5Cg9Khe9kDcpTyU+HVywy0I6Xk0y1AOugybLP+ZuOD/HCteB0jJ+oo0CIyPE67IAqDdGAl4KwKbs05Dp2n8jHiftcLqhLSa8QhNTOwIDAQAB",
