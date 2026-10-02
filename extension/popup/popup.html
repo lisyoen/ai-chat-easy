@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon48.png" alt="" width="28" height="28">
+    <div>
+      <div class="name" data-i18n="extName"></div>
+      <div class="ver" id="version"></div>
+    </div>
+  </header>
+  <div id="update" class="update" hidden>
+    <span id="updateText"></span>
+    <button id="updateBtn" data-i18n="updateNow"></button>
+  </div>
+  <section>
+    <h2 data-i18n="toolsHeading"></h2>
+    <div id="tools"></div>
+  </section>
+  <section>
+    <h2 data-i18n="sitesHeading"></h2>
+    <div id="sites" class="sites"></div>
+  </section>
+  <footer>
+    <a href="#" id="options" data-i18n="openOptions"></a>
+    <a href="#" id="check" data-i18n="checkUpdates"></a>
+    <a href="https://github.com/lisyoen/ai-chat-easy" target="_blank" rel="noopener" data-i18n="openGithub"></a>
+  </footer>
+  <script src="../lib/version.js"></script>
+  <script src="../lib/settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

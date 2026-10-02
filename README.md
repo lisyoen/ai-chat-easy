@@ -1,64 +1,60 @@
-# ai-chat-easy
+<p align="center"><img src="assets/icon.svg" width="96" alt="AI Chat Easy"></p>
 
-Claude, ChatGPT, Gemini 등 상용 AI 챗봇 웹 UI를 더 편하게 쓰게 해 주는 Chrome 확장(Manifest V3).
+<h1 align="center">AI Chat Easy</h1>
 
-## 기능 (v0.1.0)
+<p align="center">A Swiss-army knife for AI chatbots. One small Chrome extension that makes Claude, ChatGPT and Gemini nicer to use.</p>
 
-지원 사이트: claude.ai, chatgpt.com, gemini.google.com
+<p align="center"><b>English</b> · <a href="README.ko.md">한국어</a></p>
 
-| 키 | 동작 |
-|----|------|
-| Enter | 줄바꿈 |
-| Ctrl+Enter (macOS Cmd+Enter) | 메시지 발송 |
-| Shift+Enter, Alt+Enter | 사이트 기본 동작 그대로 |
-| 한글 조합 중 Enter | 조합 확정 (가로채지 않음) |
+## Tools
 
-## 설치
+| Tool | What it does | Default key |
+|------|--------------|-------------|
+| Enter = new line | Enter adds a line break, so long prompts are never sent by accident. Send with Ctrl+Enter (Cmd+Enter on macOS). IME composition (Korean, Japanese, Chinese) is left untouched. | Enter / Ctrl+Enter |
+| Command palette | Searchable list of your prompt snippets and quick actions. | Alt+/ |
+| Prompt snippets | Reusable prompts inserted at the cursor. Edit them in the options page. | from the palette |
+| Ask other AIs | Opens another chatbot with the prompt you are writing, ready to send. | from the palette |
+| Jump to input | Focuses the chat input from anywhere on the page. | Alt+I |
+| Quick actions | Copy the current prompt, clear the input. | from the palette |
 
-1. Chrome 주소창에 `chrome://extensions` 입력
-2. 오른쪽 위 "개발자 모드" 켜기
-3. "압축해제된 확장 프로그램을 로드" → `<clone 경로>\extension` 선택
-4. 이미 열려 있던 claude.ai / ChatGPT / Gemini 탭은 새로고침
+Every tool and every site can be switched on or off from the toolbar popup.
 
-## 업데이트
+Supported sites: `claude.ai`, `chatgpt.com` (`chat.openai.com`), `gemini.google.com`.
 
-`git pull` 후 `chrome://extensions` 의 AI Chat Easy 카드에서 새로고침(↻) 버튼을 누르고, 사이트 탭을 새로고침한다.
+## Install
 
-## 개발
+The extension is not on the Chrome Web Store yet. Pick one of the two ways below.
 
-- 소스: `extension/` (빌드 없음, 이 폴더가 그대로 설치본)
-- 검증: `bash scripts/check.sh` (manifest, 문법, 저장본 셀렉터, 단위 테스트)
-- 분석 기록: `docs/analysis.md`
+### A. Git clone (recommended, one-click updates)
 
-## 설치
+1. Clone the repository: `git clone https://github.com/lisyoen/ai-chat-easy.git`
+2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the `extension` folder inside the clone.
+3. Register the updater helper once:
+   - Windows: double-click `updater\install-updater.bat`
+   - macOS / Linux: `bash updater/install-updater.sh`
 
-1. Chrome 주소창에 `chrome://extensions` 입력
-2. 오른쪽 위 "개발자 모드" 켜기
-3. "압축해제된 확장 프로그램을 로드" → `<clone 경로>\extension` 선택
-4. 이미 열려 있던 claude.ai / ChatGPT / Gemini 탭은 새로고침
+When a new version is published the toolbar icon shows a **NEW** badge. Click the icon and the extension pulls the update and reloads itself.
 
-## 업데이트
+### B. Release zip
 
-`git pull` 후 `chrome://extensions` 의 AI Chat Easy 카드에서 새로고침(↻) 버튼을 누르고, 사이트 탭을 새로고침한다.
+Download `ai-chat-easy-vX.Y.Z.zip` from [Releases](https://github.com/lisyoen/ai-chat-easy/releases/latest), unzip it, and load the folder with **Load unpacked**. The **NEW** badge still tells you when an update exists; clicking it opens the release page so you can download the new zip.
 
-## 개발
+Works in Chrome, Edge and other Chromium browsers.
 
-- 소스: `extension/` (빌드 없음, 이 폴더가 그대로 설치본)
-- 검증: `bash scripts/check.sh` (manifest, 문법, 저장본 셀렉터, 단위 테스트)
-- 분석 기록: `docs/analysis.md`
+## Privacy
 
-## 폴더 구조
+AI Chat Easy has no server and collects nothing. Your settings and snippets are stored with `chrome.storage.sync` in your own browser profile. The only network request the extension makes is a version check against `publish/latest.json` in this repository. See [PRIVACY.md](PRIVACY.md).
 
-| 경로 | 용도 |
-|------|------|
-| `sites/claude/` | claude.ai 저장 페이지 (구조 분석용 원본) |
-| `sites/chatgpt/` | chatgpt.com 저장 페이지 |
-| `sites/gemini/` | gemini.google.com 저장 페이지 |
+## Development
 
-## 사이트 저장본 업로드 방법
+- `extension/` is the extension itself. There is no build step.
+- `bash scripts/check.sh` runs manifest/i18n checks, selector checks against saved pages and unit tests.
+- `tests/e2e/run.mjs` loads the extension in Chromium with Playwright and drives a stand-in chat page.
+- `scripts/release.sh <version>` bumps the version, updates `publish/latest.json`, builds the zip, tags and publishes a GitHub release.
+- Site selectors live in `extension/content/sites.js`. See [docs/analysis.md](docs/analysis.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for adding a new chatbot.
 
-1. Chrome 에서 대상 사이트의 채팅 화면(입력창이 보이는 상태)을 연다.
-2. `Ctrl+S` → 형식 "웹페이지, 전체" 로 저장한다. `{이름}.html` 과 `{이름}_files/` 폴더가 생긴다.
-3. 둘 다 해당 사이트 폴더(예: `sites/claude/`)에 넣고 commit·push 한다.
+Chat sites change their markup often. If a tool stops working on a site, please open an issue with the site name and what you pressed.
 
-저장본에는 대화 내용·계정 이메일이 포함될 수 있으므로 레포는 private 으로 유지한다. 가능하면 새 대화(빈 채팅) 화면에서 저장한다.
+## License
+
+[MIT](LICENSE)

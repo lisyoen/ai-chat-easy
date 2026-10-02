@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AI Chat Easy</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <h1><img src="../icons/icon48.png" alt="" width="32" height="32"><span data-i18n="optionsTitle"></span></h1>
+    <section>
+      <h2 data-i18n="snippetsHeading"></h2>
+      <p class="help" data-i18n="snippetsHelp"></p>
+      <div id="snippets"></div>
+      <div class="actions">
+        <button id="add" data-i18n="addSnippet"></button>
+        <button id="reset" class="ghost" data-i18n="resetDefaults"></button>
+        <span class="spacer"></span>
+        <span id="status"></span>
+        <button id="save" class="primary" data-i18n="save"></button>
+      </div>
+    </section>
+    <section>
+      <h2 data-i18n="shortcutsHeading"></h2>
+      <table>
+        <tr><td><kbd>Enter</kbd></td><td data-i18n="toolEnterNewline"></td></tr>
+        <tr><td><kbd>Alt</kbd> + <kbd>/</kbd></td><td data-i18n="toolPalette"></td></tr>
+        <tr><td><kbd>Alt</kbd> + <kbd>I</kbd></td><td data-i18n="toolFocus"></td></tr>
+      </table>
+    </section>
+  </main>
+  <script src="../lib/settings.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

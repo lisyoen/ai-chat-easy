@@ -1,0 +1,183 @@
+{
+  "extName": {
+    "message": "AI Chat Easy"
+  },
+  "extDescription": {
+    "message": "AI 챗봇용 스위스 아미 나이프: Enter 줄바꿈, Ctrl+Enter 발송, 프롬프트 스니펫, 다른 AI에게 묻기 등. Claude, ChatGPT, Gemini 지원."
+  },
+  "toolsHeading": {
+    "message": "도구"
+  },
+  "sitesHeading": {
+    "message": "사이트"
+  },
+  "toolEnterNewline": {
+    "message": "Enter = 줄바꿈, Ctrl+Enter = 발송"
+  },
+  "toolEnterNewlineDesc": {
+    "message": "실수로 보내는 일을 막습니다. macOS 는 Cmd+Enter."
+  },
+  "toolPalette": {
+    "message": "명령 팔레트"
+  },
+  "toolPaletteDesc": {
+    "message": "Alt+/ 로 스니펫과 빠른 동작을 엽니다."
+  },
+  "toolFocus": {
+    "message": "입력창으로 이동"
+  },
+  "toolFocusDesc": {
+    "message": "Alt+I 로 어디서든 채팅 입력창에 포커스."
+  },
+  "toolAskOthers": {
+    "message": "다른 AI에게 묻기"
+  },
+  "toolAskOthersDesc": {
+    "message": "팔레트에서 지금 프롬프트를 다른 챗봇으로 보냅니다."
+  },
+  "updateAvailable": {
+    "message": "새 버전 있음: v$VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "updateNow": {
+    "message": "지금 업데이트"
+  },
+  "upToDate": {
+    "message": "최신 버전입니다"
+  },
+  "checkUpdates": {
+    "message": "업데이트 확인"
+  },
+  "checking": {
+    "message": "확인 중..."
+  },
+  "updateFailed": {
+    "message": "업데이트 실패: $MSG$",
+    "placeholders": {
+      "msg": {
+        "content": "$1"
+      }
+    }
+  },
+  "updateHelperMissing": {
+    "message": "원클릭 업데이트에는 업데이트 도우미 설치가 필요합니다. 릴리스 페이지를 엽니다."
+  },
+  "updatedTo": {
+    "message": "v$VERSION$ 으로 업데이트했습니다. 도구가 반응하지 않으면 열려 있는 채팅 탭을 새로고침하세요.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "badgeTitleUpdate": {
+    "message": "AI Chat Easy — v$VERSION$ 업데이트가 있습니다. 클릭하면 업데이트합니다.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "openOptions": {
+    "message": "스니펫·설정"
+  },
+  "openGithub": {
+    "message": "GitHub"
+  },
+  "optionsTitle": {
+    "message": "AI Chat Easy 설정"
+  },
+  "snippetsHeading": {
+    "message": "프롬프트 스니펫"
+  },
+  "snippetsHelp": {
+    "message": "스니펫은 명령 팔레트(Alt+/)에 나타납니다. 선택하면 커서 위치에 내용이 들어갑니다."
+  },
+  "snippetTitle": {
+    "message": "제목"
+  },
+  "snippetText": {
+    "message": "내용"
+  },
+  "addSnippet": {
+    "message": "스니펫 추가"
+  },
+  "deleteSnippet": {
+    "message": "삭제"
+  },
+  "save": {
+    "message": "저장"
+  },
+  "saved": {
+    "message": "저장됨"
+  },
+  "resetDefaults": {
+    "message": "기본 스니펫 복원"
+  },
+  "shortcutsHeading": {
+    "message": "단축키"
+  },
+  "paletteHint": {
+    "message": "입력해서 검색 · Enter 실행 · Esc 닫기"
+  },
+  "paletteEmpty": {
+    "message": "일치하는 항목 없음"
+  },
+  "groupSnippets": {
+    "message": "스니펫"
+  },
+  "groupActions": {
+    "message": "동작"
+  },
+  "actionAskIn": {
+    "message": "$SITE$ 에게 같은 질문하기",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionFocus": {
+    "message": "채팅 입력창에 포커스"
+  },
+  "actionClear": {
+    "message": "채팅 입력창 비우기"
+  },
+  "actionCopyPrompt": {
+    "message": "지금 프롬프트 복사"
+  },
+  "copied": {
+    "message": "복사됨"
+  },
+  "emptyPrompt": {
+    "message": "입력창이 비어 있습니다."
+  },
+  "defSnip1Title": {
+    "message": "요약"
+  },
+  "defSnip1Text": {
+    "message": "다음 내용을 5개 항목으로 요약하고, 마지막에 한 줄 결론을 붙여 줘.\n\n"
+  },
+  "defSnip2Title": {
+    "message": "쉽게 설명"
+  },
+  "defSnip2Text": {
+    "message": "다음 내용을 고등학생도 이해할 수 있게 설명해 줘. 구체적인 예시를 하나 들어 줘.\n\n"
+  },
+  "defSnip3Title": {
+    "message": "코드 리뷰"
+  },
+  "defSnip3Text": {
+    "message": "아래 코드를 리뷰해 줘. 버그, 위험한 부분, 가독성 개선 순서로 정리하고, 수정이 필요한 부분만 고친 코드를 보여 줘.\n\n"
+  },
+  "defSnip4Title": {
+    "message": "한↔영 번역"
+  },
+  "defSnip4Text": {
+    "message": "다음 내용을 번역해 줘. 한국어면 자연스러운 영어로, 영어면 자연스러운 한국어로.\n\n"
+  }
+}

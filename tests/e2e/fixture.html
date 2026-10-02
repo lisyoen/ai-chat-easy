@@ -1,0 +1,21 @@
+<!doctype html><html><body>
+<div id="log"></div>
+<div contenteditable="true" role="textbox" data-testid="chat-input" class="ProseMirror" style="min-height:40px;border:1px solid #999"></div>
+<button data-testid="chat-input-send">send</button>
+<script>
+  // Minimal stand-in for a chat editor: Enter sends, Shift+Enter inserts a line break.
+  window.events = [];
+  const ed = document.querySelector('[data-testid="chat-input"]');
+  ed.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    if (e.shiftKey) { ed.appendChild(document.createElement('br')); window.events.push('newline'); }
+    else window.events.push('enter-send');
+  });
+  ed.addEventListener('paste', (e) => {
+    e.preventDefault();
+    ed.appendChild(document.createTextNode(e.clipboardData.getData('text/plain')));
+    window.events.push('paste');
+  });
+  document.querySelector('[data-testid="chat-input-send"]').addEventListener('click', () => window.events.push('button-send'));
+</script></body></html>

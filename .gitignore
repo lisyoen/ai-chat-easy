@@ -9,3 +9,6 @@ build/
 
 # 사이트 저장본(개인 정보 포함)은 커밋하지 않는다
 sites/
+updater/host-manifest.json
+dist/
+node_modules/

@@ -1,0 +1,183 @@
+{
+  "extName": {
+    "message": "AI Chat Easy"
+  },
+  "extDescription": {
+    "message": "A Swiss-army knife for AI chatbots: Enter for newline, Ctrl+Enter to send, prompt snippets, ask other AIs and more. Works on Claude, ChatGPT and Gemini."
+  },
+  "toolsHeading": {
+    "message": "Tools"
+  },
+  "sitesHeading": {
+    "message": "Sites"
+  },
+  "toolEnterNewline": {
+    "message": "Enter = new line, Ctrl+Enter = send"
+  },
+  "toolEnterNewlineDesc": {
+    "message": "Stops accidental sends. Cmd+Enter on macOS."
+  },
+  "toolPalette": {
+    "message": "Command palette"
+  },
+  "toolPaletteDesc": {
+    "message": "Alt+/ opens snippets and quick actions."
+  },
+  "toolFocus": {
+    "message": "Jump to input"
+  },
+  "toolFocusDesc": {
+    "message": "Alt+I focuses the chat input from anywhere."
+  },
+  "toolAskOthers": {
+    "message": "Ask other AIs"
+  },
+  "toolAskOthersDesc": {
+    "message": "Send the current prompt to another chatbot from the palette."
+  },
+  "updateAvailable": {
+    "message": "Update available: v$VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "updateNow": {
+    "message": "Update now"
+  },
+  "upToDate": {
+    "message": "Up to date"
+  },
+  "checkUpdates": {
+    "message": "Check for updates"
+  },
+  "checking": {
+    "message": "Checking..."
+  },
+  "updateFailed": {
+    "message": "Update failed: $MSG$",
+    "placeholders": {
+      "msg": {
+        "content": "$1"
+      }
+    }
+  },
+  "updateHelperMissing": {
+    "message": "One-click update needs the updater helper. Opening the release page."
+  },
+  "updatedTo": {
+    "message": "Updated to v$VERSION$. Refresh open chat tabs if a tool does not respond.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "badgeTitleUpdate": {
+    "message": "AI Chat Easy — v$VERSION$ is available. Click to update.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "openOptions": {
+    "message": "Snippets & settings"
+  },
+  "openGithub": {
+    "message": "GitHub"
+  },
+  "optionsTitle": {
+    "message": "AI Chat Easy settings"
+  },
+  "snippetsHeading": {
+    "message": "Prompt snippets"
+  },
+  "snippetsHelp": {
+    "message": "Snippets appear in the command palette (Alt+/). Selecting one inserts its text at the cursor."
+  },
+  "snippetTitle": {
+    "message": "Title"
+  },
+  "snippetText": {
+    "message": "Text"
+  },
+  "addSnippet": {
+    "message": "Add snippet"
+  },
+  "deleteSnippet": {
+    "message": "Delete"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "resetDefaults": {
+    "message": "Restore default snippets"
+  },
+  "shortcutsHeading": {
+    "message": "Shortcuts"
+  },
+  "paletteHint": {
+    "message": "Type to search · Enter to run · Esc to close"
+  },
+  "paletteEmpty": {
+    "message": "No matches"
+  },
+  "groupSnippets": {
+    "message": "Snippets"
+  },
+  "groupActions": {
+    "message": "Actions"
+  },
+  "actionAskIn": {
+    "message": "Ask $SITE$ the same prompt",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionFocus": {
+    "message": "Focus the chat input"
+  },
+  "actionClear": {
+    "message": "Clear the chat input"
+  },
+  "actionCopyPrompt": {
+    "message": "Copy the current prompt"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "emptyPrompt": {
+    "message": "The input is empty."
+  },
+  "defSnip1Title": {
+    "message": "Summarize"
+  },
+  "defSnip1Text": {
+    "message": "Summarize the following in 5 bullet points, then give a one-line conclusion.\n\n"
+  },
+  "defSnip2Title": {
+    "message": "Explain simply"
+  },
+  "defSnip2Text": {
+    "message": "Explain the following so that a smart high-school student can understand it. Use one concrete example.\n\n"
+  },
+  "defSnip3Title": {
+    "message": "Review my code"
+  },
+  "defSnip3Text": {
+    "message": "Review the code below. List bugs first, then risky parts, then readability improvements. Show fixed code only for the parts you change.\n\n"
+  },
+  "defSnip4Title": {
+    "message": "Translate KO ↔ EN"
+  },
+  "defSnip4Text": {
+    "message": "Translate the following. If it is Korean, translate into natural English; if it is English, translate into natural Korean.\n\n"
+  }
+}
