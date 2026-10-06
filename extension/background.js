@@ -5,6 +5,7 @@ const REPO = "lisyoen/ai-chat-easy";
 const LATEST_URL = "https://raw.githubusercontent.com/" + REPO + "/main/publish/latest.json";
 const NATIVE_HOST = "io.github.lisyoen.ai_chat_easy";
 const ALARM = "aice-update-check";
+const CHECK_MINUTES = 1; // update check interval
 const CONTENT_FILES = chrome.runtime.getManifest().content_scripts[0].js;
 const SITE_PATTERNS = chrome.runtime.getManifest().content_scripts[0].matches;
 const t = (k, s) => chrome.i18n.getMessage(k, s) || k;
@@ -102,7 +103,7 @@ async function reinjectContentScripts() {
 }
 
 chrome.runtime.onInstalled.addListener(async (details) => {
-  chrome.alarms.create(ALARM, { periodInMinutes: 360 });
+  chrome.alarms.create(ALARM, { periodInMinutes: CHECK_MINUTES });
   // Clear a stale "update available" left by the previous version before anything else.
   await refreshFromStorage();
   if (details.reason === "install") {
@@ -118,7 +119,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 chrome.runtime.onStartup.addListener(async () => {
-  chrome.alarms.create(ALARM, { periodInMinutes: 360 });
+  chrome.alarms.create(ALARM, { periodInMinutes: CHECK_MINUTES });
   await refreshFromStorage();
   checkForUpdate();
 });
