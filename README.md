@@ -13,7 +13,7 @@
 | Enter = new line | Enter adds a line break, so long prompts are never sent by accident. Send with Ctrl+Enter (Cmd+Enter on macOS). IME composition (Korean, Japanese, Chinese) is left untouched. | Enter / Ctrl+Enter |
 | Command palette | Searchable list of your prompt snippets and quick actions. | Alt+/ |
 | Prompt snippets | Reusable prompts inserted at the cursor. Edit them in the options page. | from the palette |
-| Ask other AIs | Opens another chatbot with the prompt you are writing, ready to send. | from the palette |
+| Send to all | The moment you send in one chatbot (Enter, Ctrl+Enter or the send button), the same message is sent to the other chatbots you checked: into the open tab's conversation, or a new background tab. | check chatbots in the popup |
 | Jump to input | Focuses the chat input from anywhere on the page. | Alt+I |
 | Quick actions | Copy the current prompt, clear the input. | from the palette |
 

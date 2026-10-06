@@ -1,5 +1,5 @@
 "use strict";
-importScripts("lib/version.js", "lib/settings.js");
+importScripts("lib/version.js", "lib/settings.js", "content/sites.js");
 
 const REPO = "lisyoen/ai-chat-easy";
 const LATEST_URL = "https://raw.githubusercontent.com/" + REPO + "/main/publish/latest.json";
@@ -102,6 +102,39 @@ async function reinjectContentScripts() {
   }
 }
 
+// Broadcast: deliver the prompt to the most recently used tab of each target chatbot
+// (keeping that conversation going); open a new chat in the background if none is open.
+async function deliverTo(siteId, text, senderTabId) {
+  const site = AICE.SITES.find((s) => s.id === siteId);
+  if (!site) return { name: siteId, ok: false };
+  const tabs = (await chrome.tabs.query({ url: AICE.urlPatterns(site) }))
+    .filter((tab) => tab.id !== senderTabId && !tab.discarded)
+    .sort((a, b) => (b.lastAccessed || 0) - (a.lastAccessed || 0));
+  const msg = { type: "aice:deliver", text };
+  if (tabs.length) {
+    const tab = tabs[0];
+    try {
+      const r = await chrome.tabs.sendMessage(tab.id, msg);
+      if (r && r.ok) return { name: site.name, ok: true };
+    } catch (_e) {
+      // Tab opened before the extension was (re)loaded: inject the content scripts and retry.
+      try {
+        await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: CONTENT_FILES });
+        const r = await chrome.tabs.sendMessage(tab.id, msg);
+        if (r && r.ok) return { name: site.name, ok: true };
+      } catch (_e2) { /* fall through to a new tab */ }
+    }
+  }
+  await chrome.tabs.create({ url: AICE.handoffUrl(site, text, true), active: false });
+  return { name: site.name, ok: true, newTab: true };
+}
+
+async function broadcast(msg, sender) {
+  const senderTabId = sender && sender.tab ? sender.tab.id : -1;
+  const results = await Promise.all((msg.targets || []).map((id) => deliverTo(id, String(msg.text || ""), senderTabId)));
+  return { results };
+}
+
 chrome.runtime.onInstalled.addListener(async (details) => {
   chrome.alarms.create(ALARM, { periodInMinutes: CHECK_MINUTES });
   // Clear a stale "update available" left by the previous version before anything else.
@@ -129,7 +162,8 @@ chrome.alarms.onAlarm.addListener((a) => { if (a.name === ALARM) checkForUpdate(
 // Only fires while no popup is set, i.e. when an update is pending.
 chrome.action.onClicked.addListener(() => { runUpdate(); });
 
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg && msg.type === "aice:broadcast") { broadcast(msg, sender).then(sendResponse); return true; }
   if (msg && msg.type === "checkUpdate") { checkForUpdate().then(sendResponse); return true; }
   if (msg && msg.type === "runUpdate") { runUpdate().then(sendResponse); return true; }
   return false;

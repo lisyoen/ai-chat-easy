@@ -30,3 +30,4 @@ a { color: var(--accent); text-decoration: none; }
   .helper { color: #f0d48a; background: #3a3220; }
 }
 .update button:disabled { background: #b9b9c0; opacity: .8; cursor: default; }
+section > .desc { color: var(--muted); font-size: 11px; margin-bottom: 6px; }

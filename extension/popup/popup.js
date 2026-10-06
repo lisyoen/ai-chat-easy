@@ -5,7 +5,6 @@ const TOOL_TEXT = {
   enterNewline: ["toolEnterNewline", "toolEnterNewlineDesc"],
   palette: ["toolPalette", "toolPaletteDesc"],
   focusInput: ["toolFocus", "toolFocusDesc"],
-  askOthers: ["toolAskOthers", "toolAskOthersDesc"],
 };
 const SITE_NAMES = { claude: "Claude", chatgpt: "ChatGPT", gemini: "Gemini" };
 
@@ -39,6 +38,17 @@ async function render() {
     text.append(title, desc);
     row.append(text, toggle(cfg.tools[id], (v) => A.settings.save({ tools: Object.assign({}, cfg.tools, { [id]: v }) }).then(render)));
     tools.appendChild(row);
+  }
+  const bc = document.getElementById("broadcast");
+  bc.textContent = "";
+  for (const id of A.SITE_IDS) {
+    const label = document.createElement("label");
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!cfg.broadcast[id];
+    cb.addEventListener("change", () => A.settings.save({ broadcast: Object.assign({}, cfg.broadcast, { [id]: cb.checked }) }).then(render));
+    label.append(cb, document.createTextNode(SITE_NAMES[id]));
+    bc.appendChild(label);
   }
   const sites = document.getElementById("sites");
   sites.textContent = "";

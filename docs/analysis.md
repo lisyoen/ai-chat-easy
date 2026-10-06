@@ -16,5 +16,5 @@ Source: saved "new chat" pages of each site (Chrome "Webpage, Complete"), 2026-1
 - **Insert text** (snippets, prompt hand-off): a synthetic `paste` event with a `DataTransfer`, which both ProseMirror and Quill handle and which keeps line breaks. Fallback: `execCommand("insertText")`.
 - Synthetic events are tracked in a `WeakSet` so the listener never intercepts its own events.
 - IME composition (`isComposing`, keyCode 229) is never intercepted.
-- **Ask other AIs** opens `<new chat url>#aice-prompt=<encoded>`; the content script on the target site removes the hash and fills the input once it appears. It never sends automatically.
+- **Send to all** (broadcast): when a message is sent (our Ctrl+Enter, the site's own Enter, or a trusted click on the send button) the content script reads the input and asks the background to deliver it to each checked chatbot. The background messages the most recently used tab of that site (`aice:deliver` → fill + send) or, with none open, opens `<new chat url>#aice-prompt=<encoded>&aice-send=1` in a background tab, which fills and sends once the input appears. Our own synthetic clicks are untrusted, so a delivered message is never broadcast again.
 - After an extension update the background re-injects the content scripts into open chat tabs; the old copy receives an `aice:takeover` event and stops.

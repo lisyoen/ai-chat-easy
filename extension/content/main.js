@@ -42,20 +42,6 @@
       });
     }
     const act = t("groupActions");
-    if (enabled("askOthers")) {
-      for (const other of A.SITES) {
-        if (other.id === site.id) continue;
-        items.push({
-          group: act, label: t("actionAskIn", [other.name]),
-          run: () => {
-            const ed = lastEditor || currentEditor();
-            const text = ed ? A.editor.getText(ed) : "";
-            if (!text) { A.palette.toast(t("emptyPrompt")); return; }
-            window.open(A.handoffUrl(other, text), "_blank", "noopener");
-          },
-        });
-      }
-    }
     items.push({ group: act, label: t("actionFocus"), run: () => { const ed = currentEditor(); if (ed) A.editor.focusEnd(ed); } });
     items.push({
       group: act, label: t("actionCopyPrompt"),
@@ -70,6 +56,38 @@
     items.push({ group: act, label: t("actionClear"), run: () => { const ed = lastEditor || currentEditor(); if (ed) A.editor.clear(ed); } });
     return items;
   }
+
+  // Broadcast: a message sent here also goes to the chatbots checked in the popup.
+  let lastBroadcast = { text: "", at: 0 };
+  function broadcastTargets() {
+    if (cfg.sites[site.id] === false) return [];
+    return A.SITES.filter((s) => s.id !== site.id && cfg.broadcast && cfg.broadcast[s.id]).map((s) => s.id);
+  }
+  function broadcast(editor) {
+    const targets = broadcastTargets();
+    if (!targets.length) return;
+    const ed = editor || currentEditor();
+    const text = ed ? A.editor.getText(ed) : "";
+    if (!text) return;
+    // One send can be seen twice (key + button click); send it once.
+    if (text === lastBroadcast.text && Date.now() - lastBroadcast.at < 3000) return;
+    lastBroadcast = { text, at: Date.now() };
+    try {
+      chrome.runtime.sendMessage({ type: "aice:broadcast", targets, text }).then((r) => {
+        if (!r || !r.results) return;
+        const ok = r.results.filter((x) => x.ok).map((x) => x.name);
+        const bad = r.results.filter((x) => !x.ok).map((x) => x.name);
+        if (ok.length) A.palette.toast(t("broadcastSent", [ok.join(", ")]));
+        if (bad.length) A.palette.toast(t("broadcastFailed", [bad.join(", ")]));
+      }).catch(() => {});
+    } catch (_e) { /* extension reloaded */ }
+  }
+
+  // Native sends: a real click on the site's send button (our own clicks are untrusted and skipped).
+  document.addEventListener("click", (e) => {
+    if (!contextValid() || !e.isTrusted || !(e.target instanceof Element)) return;
+    if (e.target.closest(site.sendButtons.join(","))) broadcast();
+  }, true);
 
   function openPalette() {
     lastEditor = currentEditor();
@@ -91,29 +109,40 @@
       return;
     }
 
-    if (!enabled("enterNewline")) return;
     const editor = A.editor.findComposer(site, e.target);
+    if (!enabled("enterNewline")) {
+      // The site's own Enter sends; broadcast the text before it clears the input.
+      if (editor && A.decideAction(e, true) === "newline") broadcast(editor);
+      return;
+    }
     const action = A.decideAction(e, !!editor);
     if (action === "pass") return;
     e.preventDefault();
     e.stopImmediatePropagation();
     if (action === "newline") A.editor.insertNewline(editor);
-    else A.editor.send(site, editor);
+    else { broadcast(editor); A.editor.send(site, editor); }
   }, true);
 
-  // Prompt handed over from another chatbot (#aice-prompt=...): fill the input once it appears.
+  // Delivery from a broadcast started in another chatbot tab.
+  try {
+    chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+      if (!contextValid() || !msg || msg.type !== "aice:deliver") return false;
+      A.editor.fillAndSend(site, msg.text).then(sendResponse);
+      return true;
+    });
+  } catch (_e) { /* ignore */ }
+
+  // Prompt handed over in a new tab (#aice-prompt=...[&aice-send=1]): fill it in, and send if asked.
   const handoff = A.readHandoff(location.hash);
   if (handoff) {
+    const autoSend = A.readHandoffSend(location.hash);
     history.replaceState(null, "", location.pathname + location.search);
-    const started = Date.now();
-    const timer = setInterval(() => {
-      const ed = A.editor.anyComposer(site);
-      if (ed) {
-        clearInterval(timer);
-        setTimeout(() => A.editor.insertText(ed, handoff), 300);
-      } else if (Date.now() - started > 20000) {
-        clearInterval(timer);
-      }
-    }, 250);
+    A.editor.waitFor(() => A.editor.anyComposer(site), 20000).then((ed) => {
+      if (!ed) return;
+      setTimeout(() => {
+        if (autoSend) A.editor.fillAndSend(site, handoff);
+        else A.editor.insertText(ed, handoff);
+      }, 500);
+    });
   }
 })();

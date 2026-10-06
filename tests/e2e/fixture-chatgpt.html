@@ -1,0 +1,10 @@
+<!doctype html><html><body>
+<div contenteditable="true" id="prompt-textarea" class="ProseMirror" role="textbox" style="min-height:40px;border:1px solid #999;white-space:pre-wrap"></div>
+<button id="composer-submit-button">send</button>
+<script>
+  // Minimal stand-in for ChatGPT: records what gets sent.
+  window.sent = [];
+  const ed = document.getElementById('prompt-textarea');
+  ed.addEventListener('paste', (e) => { e.preventDefault(); ed.appendChild(document.createTextNode(e.clipboardData.getData('text/plain'))); });
+  document.getElementById('composer-submit-button').addEventListener('click', () => { window.sent.push(ed.innerText.trim()); ed.textContent = ''; });
+</script></body></html>

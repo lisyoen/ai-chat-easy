@@ -29,12 +29,6 @@
   "toolFocusDesc": {
     "message": "Alt+I focuses the chat input from anywhere."
   },
-  "toolAskOthers": {
-    "message": "Ask other AIs"
-  },
-  "toolAskOthersDesc": {
-    "message": "Send the current prompt to another chatbot from the palette."
-  },
   "updateAvailable": {
     "message": "Update available: v$VERSION$",
     "placeholders": {
@@ -130,14 +124,6 @@
   "groupActions": {
     "message": "Actions"
   },
-  "actionAskIn": {
-    "message": "Ask $SITE$ the same prompt",
-    "placeholders": {
-      "site": {
-        "content": "$1"
-      }
-    }
-  },
   "actionFocus": {
     "message": "Focus the chat input"
   },
@@ -209,5 +195,27 @@
   },
   "helperGuide": {
     "message": "The updater helper is not registered yet. Run updater\\install-updater.bat (Windows) or updater/install-updater.sh (macOS/Linux) inside the extension folder once, then try again."
+  },
+  "broadcastHeading": {
+    "message": "Send to all"
+  },
+  "broadcastDesc": {
+    "message": "When you send, the same message also goes to the checked chatbots (into an open tab's conversation, or a new tab)."
+  },
+  "broadcastSent": {
+    "message": "Also sent to $NAMES$",
+    "placeholders": {
+      "names": {
+        "content": "$1"
+      }
+    }
+  },
+  "broadcastFailed": {
+    "message": "Could not send to $NAMES$",
+    "placeholders": {
+      "names": {
+        "content": "$1"
+      }
+    }
   }
 }

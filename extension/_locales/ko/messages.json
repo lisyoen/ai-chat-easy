@@ -29,12 +29,6 @@
   "toolFocusDesc": {
     "message": "Alt+I 로 어디서든 채팅 입력창에 포커스."
   },
-  "toolAskOthers": {
-    "message": "다른 AI에게 묻기"
-  },
-  "toolAskOthersDesc": {
-    "message": "팔레트에서 지금 프롬프트를 다른 챗봇으로 보냅니다."
-  },
   "updateAvailable": {
     "message": "새 버전 있음: v$VERSION$",
     "placeholders": {
@@ -130,14 +124,6 @@
   "groupActions": {
     "message": "동작"
   },
-  "actionAskIn": {
-    "message": "$SITE$ 에게 같은 질문하기",
-    "placeholders": {
-      "site": {
-        "content": "$1"
-      }
-    }
-  },
   "actionFocus": {
     "message": "채팅 입력창에 포커스"
   },
@@ -209,5 +195,27 @@
   },
   "helperGuide": {
     "message": "업데이트 도우미가 아직 등록되지 않았습니다. 확장 폴더 안의 updater\\install-updater.bat(Windows) 또는 updater/install-updater.sh(macOS·Linux)를 한 번만 실행한 뒤 다시 눌러 주세요."
+  },
+  "broadcastHeading": {
+    "message": "동시 발송"
+  },
+  "broadcastDesc": {
+    "message": "체크한 챗봇에도 보내는 순간 같은 질문이 함께 발송됩니다(열린 탭이 있으면 그 대화에, 없으면 새 탭)."
+  },
+  "broadcastSent": {
+    "message": "$NAMES$ 에도 보냈습니다",
+    "placeholders": {
+      "names": {
+        "content": "$1"
+      }
+    }
+  },
+  "broadcastFailed": {
+    "message": "$NAMES$ 발송 실패",
+    "placeholders": {
+      "names": {
+        "content": "$1"
+      }
+    }
   }
 }

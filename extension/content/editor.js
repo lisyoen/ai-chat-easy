@@ -77,6 +77,31 @@
     document.execCommand("delete");
   }
 
-  const api = { editor: { isSynthetic, findComposer, anyComposer, findSendButton, insertNewline, send, focusEnd, insertText, getText, clear } };
+  function waitFor(fn, timeoutMs) {
+    return new Promise((resolve) => {
+      const started = Date.now();
+      (function tick() {
+        const v = fn();
+        if (v) resolve(v);
+        else if (Date.now() - started > timeoutMs) resolve(null);
+        else setTimeout(tick, 200);
+      })();
+    });
+  }
+
+  // Fill the composer with text and submit it, as if the user typed and pressed send.
+  async function fillAndSend(site, text) {
+    const editor = await waitFor(() => anyComposer(site), 30000);
+    if (!editor) return { ok: false, message: "composer not found" };
+    editor.focus();
+    if (getText(editor)) clear(editor);
+    insertText(editor, text);
+    // The site enables its send button after it has seen the new text.
+    await waitFor(() => getText(editor) && findSendButton(site), 5000);
+    send(site, editor);
+    return { ok: true };
+  }
+
+  const api = { editor: { isSynthetic, waitFor, fillAndSend, findComposer, anyComposer, findSendButton, insertNewline, send, focusEnd, insertText, getText, clear } };
   root.AICE = Object.assign(root.AICE || {}, api);
 })(globalThis);

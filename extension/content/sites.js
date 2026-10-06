@@ -37,8 +37,19 @@
   // A prompt handed over from another chatbot travels in the URL hash.
   const HANDOFF_KEY = "aice-prompt";
 
-  function handoffUrl(site, prompt) {
-    return site.newChatUrl + "#" + HANDOFF_KEY + "=" + encodeURIComponent(prompt);
+  const SEND_KEY = "aice-send";
+
+  // send=true asks the target tab to submit the prompt right after filling it in.
+  function handoffUrl(site, prompt, send) {
+    return site.newChatUrl + "#" + HANDOFF_KEY + "=" + encodeURIComponent(prompt) + (send ? "&" + SEND_KEY + "=1" : "");
+  }
+
+  function readHandoffSend(hash) {
+    return new RegExp("[#&]" + SEND_KEY + "=1(&|$)").test(String(hash || ""));
+  }
+
+  function urlPatterns(site) {
+    return site.hosts.map((h) => "https://" + h + "/*");
   }
 
   function readHandoff(hash) {
@@ -47,7 +58,7 @@
     try { return decodeURIComponent(m[1]); } catch (_e) { return null; }
   }
 
-  const api = { SITES, siteForHost, handoffUrl, readHandoff, HANDOFF_KEY };
+  const api = { SITES, siteForHost, handoffUrl, readHandoff, readHandoffSend, urlPatterns, HANDOFF_KEY };
   root.AICE = Object.assign(root.AICE || {}, api);
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

@@ -2,7 +2,7 @@
 (function (root) {
   "use strict";
 
-  const TOOL_IDS = ["enterNewline", "palette", "focusInput", "askOthers"];
+  const TOOL_IDS = ["enterNewline", "palette", "focusInput"];
   const SITE_IDS = ["claude", "chatgpt", "gemini"];
 
   function defaultSnippets(msg) {
@@ -18,6 +18,8 @@
     return {
       tools: Object.fromEntries(TOOL_IDS.map((id) => [id, true])),
       sites: Object.fromEntries(SITE_IDS.map((id) => [id, true])),
+      // Chatbots that also receive every message sent from another chatbot (off by default).
+      broadcast: Object.fromEntries(SITE_IDS.map((id) => [id, false])),
       snippets: defaultSnippets(msg),
     };
   }
@@ -27,8 +29,9 @@
     const d = defaults(msg);
     const s = stored || {};
     return {
-      tools: Object.assign({}, d.tools, s.tools || {}),
+      tools: Object.fromEntries(TOOL_IDS.map((id) => [id, (s.tools || {})[id] !== undefined ? s.tools[id] : d.tools[id]])),
       sites: Object.assign({}, d.sites, s.sites || {}),
+      broadcast: Object.assign({}, d.broadcast, s.broadcast || {}),
       snippets: Array.isArray(s.snippets) ? s.snippets : d.snippets,
     };
   }
@@ -41,7 +44,7 @@
   }
 
   async function load() {
-    const stored = await chrome.storage.sync.get(["tools", "sites", "snippets"]);
+    const stored = await chrome.storage.sync.get(["tools", "sites", "broadcast", "snippets"]);
     return merge(stored, i18n);
   }
 

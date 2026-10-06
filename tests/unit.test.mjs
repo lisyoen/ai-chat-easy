@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 const require = createRequire(import.meta.url);
 const { decideAction, matchShortcut, filterItems } = require("../extension/content/keys.js");
-const { siteForHost, handoffUrl, readHandoff, SITES } = require("../extension/content/sites.js");
+const { siteForHost, handoffUrl, readHandoff, readHandoffSend, urlPatterns, SITES } = require("../extension/content/sites.js");
 const { compareVersions } = require("../extension/lib/version.js");
 const S = require("../extension/lib/settings.js");
 
@@ -88,4 +88,21 @@ test("manifest version matches publish/latest.json not ahead", () => {
   const m = JSON.parse(readFileSync(new URL("../extension/manifest.json", import.meta.url)));
   const l = JSON.parse(readFileSync(new URL("../publish/latest.json", import.meta.url)));
   assert.ok(compareVersions(l.version, m.version) <= 0, "latest.json must never announce a version newer than the code");
+});
+
+test("broadcast handoff carries the auto-send flag", () => {
+  const s = SITES.find((x) => x.id === "chatgpt");
+  const u = new URL(handoffUrl(s, "a&b=c 한글", true));
+  assert.equal(readHandoff(u.hash), "a&b=c 한글");
+  assert.equal(readHandoffSend(u.hash), true);
+  assert.equal(readHandoffSend(new URL(handoffUrl(s, "x")).hash), false);
+  assert.deepEqual(urlPatterns(s), ["https://chatgpt.com/*", "https://chat.openai.com/*"]);
+});
+
+test("broadcast targets default off; retired askOthers tool dropped", () => {
+  const m = S.merge({ tools: { askOthers: true, palette: false }, broadcast: { gemini: true } });
+  assert.deepEqual(m.broadcast, { claude: false, chatgpt: false, gemini: true });
+  assert.equal("askOthers" in m.tools, false);
+  assert.equal(m.tools.palette, false);
+  assert.equal(m.tools.enterNewline, true);
 });
