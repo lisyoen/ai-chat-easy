@@ -53,25 +53,51 @@ async function render() {
   }
 }
 
-async function showUpdate() {
-  const { latestVersion, updateAvailable, checkedAt } = await chrome.storage.local.get(["latestVersion", "updateAvailable", "checkedAt"]);
-  if (checkedAt) document.getElementById("checked").textContent = t("lastChecked", [new Date(checkedAt).toLocaleString()]);
-  const box = document.getElementById("update");
-  box.hidden = !updateAvailable;
-  if (updateAvailable) document.getElementById("updateText").textContent = t("updateAvailable", [latestVersion]);
+function setStatus(text, isError) {
+  const el = document.getElementById("status");
+  el.textContent = text;
+  el.classList.toggle("error", !!isError);
+  el.hidden = !text;
 }
 
-document.getElementById("updateBtn").addEventListener("click", () => {
-  chrome.runtime.sendMessage({ type: "runUpdate" });
-  window.close();
+async function showUpdate() {
+  const current = chrome.runtime.getManifest().version;
+  const { latestVersion, checkedAt, checkError, helperMissing } =
+    await chrome.storage.local.get(["latestVersion", "checkedAt", "checkError", "helperMissing"]);
+  if (checkedAt) document.getElementById("checked").textContent = t("lastChecked", [new Date(checkedAt).toLocaleString()]);
+  // Compare against the running version every time; a stored flag may be from an older install.
+  const newer = A.isNewer(latestVersion, current);
+  document.getElementById("update").hidden = !newer;
+  if (newer) {
+    document.getElementById("updateText").textContent = t("updateAvailable", [latestVersion]);
+    setStatus("");
+  } else if (checkError && !checkedAt) {
+    setStatus(t("checkFailed", [checkError]), true);
+  } else {
+    setStatus(t("upToDateVersion", [current]));
+  }
+  document.getElementById("helper").hidden = !(newer && helperMissing);
+}
+
+document.getElementById("updateBtn").addEventListener("click", async (e) => {
+  const btn = e.currentTarget;
+  btn.disabled = true;
+  btn.textContent = t("updating");
+  // On success the extension reloads itself and this popup closes; otherwise show why.
+  const r = await chrome.runtime.sendMessage({ type: "runUpdate" });
+  btn.disabled = false;
+  btn.textContent = t("updateNow");
+  await showUpdate();
+  if (r && !r.ok && !r.missing) setStatus(t("updateFailed", [String(r.message || "").slice(-200)]), true);
 });
 document.getElementById("check").addEventListener("click", async (e) => {
   e.preventDefault();
   const a = e.currentTarget;
   a.textContent = t("checking");
   const r = await chrome.runtime.sendMessage({ type: "checkUpdate" });
-  a.textContent = r && r.newer ? t("updateAvailable", [r.latest]) : (r && r.error ? r.error : t("upToDate"));
-  showUpdate();
+  a.textContent = t("checkUpdates");
+  await showUpdate();
+  if (r && r.error) setStatus(t("checkFailed", [r.error]), true);
 });
 document.getElementById("options").addEventListener("click", (e) => { e.preventDefault(); chrome.runtime.openOptionsPage(); });
 

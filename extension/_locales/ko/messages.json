@@ -46,9 +46,6 @@
   "updateNow": {
     "message": "지금 업데이트"
   },
-  "upToDate": {
-    "message": "최신 버전입니다"
-  },
   "checkUpdates": {
     "message": "업데이트 확인"
   },
@@ -64,7 +61,7 @@
     }
   },
   "updateHelperMissing": {
-    "message": "원클릭 업데이트에는 업데이트 도우미 설치가 필요합니다. 릴리스 페이지를 엽니다."
+    "message": "업데이트 도우미가 등록되지 않았습니다. 확장 폴더의 updater\\install-updater.bat 를 한 번 실행해 주세요."
   },
   "updatedTo": {
     "message": "v$VERSION$ 으로 업데이트했습니다. 도구가 반응하지 않으면 열려 있는 채팅 탭을 새로고침하세요.",
@@ -190,5 +187,27 @@
         "content": "$1"
       }
     }
+  },
+  "upToDateVersion": {
+    "message": "최신 버전입니다 (v$VERSION$)",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "updating": {
+    "message": "업데이트 받는 중..."
+  },
+  "checkFailed": {
+    "message": "업데이트 확인 실패: $MSG$",
+    "placeholders": {
+      "msg": {
+        "content": "$1"
+      }
+    }
+  },
+  "helperGuide": {
+    "message": "업데이트 도우미가 아직 등록되지 않았습니다. 확장 폴더 안의 updater\\install-updater.bat(Windows) 또는 updater/install-updater.sh(macOS·Linux)를 한 번만 실행한 뒤 다시 눌러 주세요."
   }
 }

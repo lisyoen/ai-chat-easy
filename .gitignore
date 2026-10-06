@@ -12,3 +12,4 @@ sites/
 updater/host-manifest.json
 dist/
 node_modules/
+__pycache__/

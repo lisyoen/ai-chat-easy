@@ -53,6 +53,14 @@ test("prompt handoff round trip", () => {
   assert.equal(readHandoff("#other=1"), null);
 });
 
+test("update available only when published version is newer than the running one", () => {
+  const { isNewer } = require("../extension/lib/version.js");
+  assert.equal(isNewer("0.3.1", "0.3.1"), false);
+  assert.equal(isNewer("0.3.1", "0.4.0"), false);
+  assert.equal(isNewer("0.4.0", "0.3.1"), true);
+  assert.equal(isNewer(null, "0.3.1"), false);
+});
+
 test("version compare", () => {
   assert.equal(compareVersions("0.2.0", "0.1.0"), 1);
   assert.equal(compareVersions("0.10.0", "0.9.9"), 1);

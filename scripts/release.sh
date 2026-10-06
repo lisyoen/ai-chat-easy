@@ -15,14 +15,14 @@ m = json.load(open(p, encoding="utf-8")); m["version"] = v
 open(p, "w", encoding="utf-8").write(json.dumps(m, ensure_ascii=False, indent=2) + "\n")
 latest = {"version": v,
           "releaseUrl": f"https://github.com/lisyoen/ai-chat-easy/releases/tag/v{v}",
+          "zipUrl": f"https://github.com/lisyoen/ai-chat-easy/releases/download/v{v}/ai-chat-easy-v{v}.zip",
           "publishedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
 open("publish/latest.json", "w", encoding="utf-8").write(json.dumps(latest, indent=2) + "\n")
 PY
 bash scripts/check.sh > /dev/null
 mkdir -p dist
 ZIP="dist/ai-chat-easy-v${VERSION}.zip"
-rm -f "$ZIP"
-(cd extension && zip -qr "../$ZIP" .)
+bash scripts/build-zip.sh "$ZIP"
 git add -A
 git commit -qm "release: v${VERSION}"
 git tag "v${VERSION}"

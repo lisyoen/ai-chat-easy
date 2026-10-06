@@ -23,21 +23,27 @@ Supported sites: `claude.ai`, `chatgpt.com` (`chat.openai.com`), `gemini.google.
 
 ## Install
 
-The extension is not on the Chrome Web Store yet. Pick one of the two ways below.
+The extension is not on the Chrome Web Store yet. Pick one of the two ways below. Either way, register the updater helper once; after that, when a new version is published, clicking the **NEW** badge on the toolbar icon downloads the new files, replaces them and reloads the extension (the same as the reload button on `chrome://extensions`).
 
-### A. Git clone (recommended, one-click updates)
+### A. Release zip (no Git needed)
 
-1. Clone the repository: `git clone https://github.com/lisyoen/ai-chat-easy.git`
-2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the `extension` folder inside the clone.
+1. Download `ai-chat-easy-vX.Y.Z.zip` from [Releases](https://github.com/lisyoen/ai-chat-easy/releases/latest) and unzip it into a folder (e.g. `C:\ai-chat-easy`).
+2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose that folder.
 3. Register the updater helper once:
-   - Windows: double-click `updater\install-updater.bat`
+   - Windows: double-click `updater\install-updater.bat` inside the folder
    - macOS / Linux: `bash updater/install-updater.sh`
 
-When a new version is published the toolbar icon shows a **NEW** badge. Click the icon and the extension pulls the update and reloads itself.
+On update the helper downloads the new zip from GitHub Releases and replaces the files in the same folder. Behind a corporate proxy it uses the Windows system proxy settings.
 
-### B. Release zip
+### B. Git clone
 
-Download `ai-chat-easy-vX.Y.Z.zip` from [Releases](https://github.com/lisyoen/ai-chat-easy/releases/latest), unzip it, and load the folder with **Load unpacked**. The **NEW** badge still tells you when an update exists; clicking it opens the release page so you can download the new zip.
+1. Clone the repository: `git clone https://github.com/lisyoen/ai-chat-easy.git`
+2. **Load unpacked** the `extension` folder inside the clone.
+3. Register the updater helper: Windows `updater\install-updater.bat`, macOS / Linux `bash updater/install-updater.sh`
+
+Updates are then pulled with `git pull`.
+
+The popup says "You have the latest version" when you are up to date, or shows an "Update now" button when a newer version exists. If the helper is not registered yet, clicking update explains how to register it.
 
 Works in Chrome, Edge and other Chromium browsers.
 

@@ -7,11 +7,14 @@ set "HOST_PATH=%~dp0host.bat"
 set "MANIFEST_PATH=%~dp0host-manifest.json"
 set "JSON_HOST_PATH=%HOST_PATH:\=\\%"
 
-where git > nul 2>&1
-if errorlevel 1 (
-  echo [!] Git is not installed or not in PATH. / Git 이 설치되어 있지 않습니다.
-  pause
-  exit /b 1
+rem Git is only needed for a git clone; a release-zip folder updates itself by download.
+if exist "%~dp0..\.git" (
+  where git > nul 2>&1
+  if errorlevel 1 (
+    echo [!] Git is not installed or not in PATH. / Git 이 설치되어 있지 않습니다.
+    pause
+    exit /b 1
+  )
 )
 
 > "%MANIFEST_PATH%" echo {"name":"%HOST_NAME%","description":"AI Chat Easy one-click updater","type":"stdio","path":"%JSON_HOST_PATH%","allowed_origins":["chrome-extension://emkjegjjbdcpllicplemgbpnmfhbocde/"]}

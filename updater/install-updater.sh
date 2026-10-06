@@ -5,7 +5,8 @@ HOST_NAME="io.github.lisyoen.ai_chat_easy"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 HOST="$DIR/host.py"
 chmod +x "$HOST"
-command -v git >/dev/null || { echo "[!] git not found"; exit 1; }
+# git is only needed for a git clone; a release-zip folder updates itself by download.
+if [ -e "$DIR/../.git" ]; then command -v git >/dev/null || { echo "[!] git not found"; exit 1; }; fi
 command -v python3 >/dev/null || { echo "[!] python3 not found"; exit 1; }
 
 if [ "$(uname)" = "Darwin" ]; then

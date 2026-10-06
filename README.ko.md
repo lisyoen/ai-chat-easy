@@ -23,21 +23,27 @@
 
 ## 설치
 
-아직 Chrome 웹 스토어에는 없습니다. 아래 두 방법 중 하나를 쓰세요.
+아직 Chrome 웹 스토어에는 없습니다. 아래 두 방법 중 하나를 쓰세요. 어느 쪽이든 업데이트 도우미를 한 번 등록해 두면, 새 버전이 나왔을 때 툴바 아이콘의 **NEW** 배지를 클릭하는 것만으로 새 파일을 내려받아 바꾸고 확장이 스스로 다시 로드됩니다(`chrome://extensions` 의 새로고침과 같은 동작).
 
-### A. Git clone (권장, 원클릭 업데이트)
+### A. 릴리스 zip (Git 불필요)
 
-1. 저장소 clone: `git clone https://github.com/lisyoen/ai-chat-easy.git`
-2. `chrome://extensions` 에서 **개발자 모드**를 켜고 **압축해제된 확장 프로그램을 로드** → clone 한 폴더 안의 `extension` 폴더 선택
-3. 업데이트 도우미를 한 번만 등록
-   - Windows: `updater\install-updater.bat` 더블클릭
+1. [Releases](https://github.com/lisyoen/ai-chat-easy/releases/latest) 에서 `ai-chat-easy-vX.Y.Z.zip` 을 받아 원하는 폴더(예: `C:\ai-chat-easy`)에 압축을 풉니다.
+2. `chrome://extensions` 에서 **개발자 모드**를 켜고 **압축해제된 확장 프로그램을 로드** → 그 폴더를 선택합니다.
+3. 업데이트 도우미를 한 번만 등록합니다.
+   - Windows: 폴더 안 `updater\install-updater.bat` 더블클릭
    - macOS / Linux: `bash updater/install-updater.sh`
 
-새 버전이 나오면 툴바 아이콘에 **NEW** 배지가 뜹니다. 아이콘을 클릭하면 확장이 업데이트를 받고 스스로 다시 로드합니다.
+업데이트 시 도우미가 GitHub 릴리스에서 새 zip 을 받아 같은 폴더의 파일을 교체합니다. 회사망처럼 프록시가 있는 환경에서는 Windows 시스템 프록시 설정을 그대로 사용합니다.
 
-### B. 릴리스 zip
+### B. Git clone
 
-[Releases](https://github.com/lisyoen/ai-chat-easy/releases/latest) 에서 `ai-chat-easy-vX.Y.Z.zip` 을 받아 압축을 풀고 **압축해제된 확장 프로그램을 로드**로 불러옵니다. 업데이트가 있으면 **NEW** 배지는 똑같이 뜨고, 클릭하면 릴리스 페이지가 열려 새 zip 을 받을 수 있습니다.
+1. 저장소 clone: `git clone https://github.com/lisyoen/ai-chat-easy.git`
+2. **압축해제된 확장 프로그램을 로드** → clone 한 폴더 안의 `extension` 폴더 선택
+3. 업데이트 도우미 등록: Windows `updater\install-updater.bat`, macOS / Linux `bash updater/install-updater.sh`
+
+이 경우 업데이트는 `git pull` 로 받습니다.
+
+팝업에는 현재 버전이 최신이면 "최신 버전입니다", 새 버전이 있으면 "지금 업데이트" 버튼이 표시됩니다. 도우미가 등록되지 않은 상태에서 업데이트를 누르면 등록 방법을 안내합니다.
 
 Chrome, Edge 등 Chromium 계열 브라우저에서 동작합니다.
 

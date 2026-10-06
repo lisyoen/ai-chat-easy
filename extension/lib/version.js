@@ -10,7 +10,12 @@
     }
     return 0;
   }
-  const api = { compareVersions };
+  // True only when the published version is strictly newer than the running one.
+  // Recomputed every time so a stored flag from an older install can never go stale.
+  function isNewer(latest, current) {
+    return !!latest && compareVersions(latest, current) > 0;
+  }
+  const api = { compareVersions, isNewer };
   root.AICE = Object.assign(root.AICE || {}, api);
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

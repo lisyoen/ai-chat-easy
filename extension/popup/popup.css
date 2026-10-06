@@ -20,3 +20,12 @@ h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: v
 .switch input:checked + span::before { transform: translateX(14px); }
 footer { display: flex; justify-content: space-between; padding: 10px 14px; }
 a { color: var(--accent); text-decoration: none; }
+.status { padding: 6px 14px; font-size: 12px; color: #1d6b3a; background: #eaf6ee; }
+.status.error { color: #8a1428; background: #fdecef; }
+.helper { padding: 8px 14px; font-size: 11px; color: #6b4a00; background: #fff6dd; }
+@media (prefers-color-scheme: dark) {
+  .status { color: #8fdca9; background: #1f3328; }
+  .status.error { color: #f3a3b1; background: #3a1f25; }
+  .helper { color: #f0d48a; background: #3a3220; }
+}
+.update button:disabled { opacity: .6; cursor: default; }

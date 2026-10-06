@@ -46,9 +46,6 @@
   "updateNow": {
     "message": "Update now"
   },
-  "upToDate": {
-    "message": "Up to date"
-  },
   "checkUpdates": {
     "message": "Check for updates"
   },
@@ -64,7 +61,7 @@
     }
   },
   "updateHelperMissing": {
-    "message": "One-click update needs the updater helper. Opening the release page."
+    "message": "The updater helper is not registered. Run updater\\install-updater.bat in the extension folder once."
   },
   "updatedTo": {
     "message": "Updated to v$VERSION$. Refresh open chat tabs if a tool does not respond.",
@@ -190,5 +187,27 @@
         "content": "$1"
       }
     }
+  },
+  "upToDateVersion": {
+    "message": "You have the latest version (v$VERSION$)",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "updating": {
+    "message": "Downloading update..."
+  },
+  "checkFailed": {
+    "message": "Update check failed: $MSG$",
+    "placeholders": {
+      "msg": {
+        "content": "$1"
+      }
+    }
+  },
+  "helperGuide": {
+    "message": "The updater helper is not registered yet. Run updater\\install-updater.bat (Windows) or updater/install-updater.sh (macOS/Linux) inside the extension folder once, then try again."
   }
 }

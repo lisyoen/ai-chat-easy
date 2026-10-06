@@ -29,3 +29,4 @@ done
 echo "syntax OK"
 python3 scripts/selector_check.py
 node --test tests/
+python3 tests/updater_zip_test.py
