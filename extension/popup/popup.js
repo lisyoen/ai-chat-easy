@@ -53,11 +53,13 @@ async function render() {
   }
 }
 
-function setStatus(text, isError) {
-  const el = document.getElementById("status");
-  el.textContent = text;
-  el.classList.toggle("error", !!isError);
-  el.hidden = !text;
+// One row always: state text on the left, "Update now" on the right (enabled only when newer).
+function setRow(text, state) {
+  const row = document.getElementById("update");
+  row.classList.toggle("latest", state === "latest");
+  row.classList.toggle("error", state === "error");
+  document.getElementById("updateText").textContent = text;
+  document.getElementById("updateBtn").disabled = state !== "newer";
 }
 
 async function showUpdate() {
@@ -67,15 +69,9 @@ async function showUpdate() {
   if (checkedAt) document.getElementById("checked").textContent = t("lastChecked", [new Date(checkedAt).toLocaleString()]);
   // Compare against the running version every time; a stored flag may be from an older install.
   const newer = A.isNewer(latestVersion, current);
-  document.getElementById("update").hidden = !newer;
-  if (newer) {
-    document.getElementById("updateText").textContent = t("updateAvailable", [latestVersion]);
-    setStatus("");
-  } else if (checkError && !checkedAt) {
-    setStatus(t("checkFailed", [checkError]), true);
-  } else {
-    setStatus(t("upToDateVersion", [current]));
-  }
+  if (newer) setRow(t("updateAvailable", [latestVersion]), "newer");
+  else if (checkError && !checkedAt) setRow(t("checkFailed", [checkError]), "error");
+  else setRow(t("upToDateVersion", [current]), "latest");
   document.getElementById("helper").hidden = !(newer && helperMissing);
 }
 
@@ -85,10 +81,9 @@ document.getElementById("updateBtn").addEventListener("click", async (e) => {
   btn.textContent = t("updating");
   // On success the extension reloads itself and this popup closes; otherwise show why.
   const r = await chrome.runtime.sendMessage({ type: "runUpdate" });
-  btn.disabled = false;
   btn.textContent = t("updateNow");
   await showUpdate();
-  if (r && !r.ok && !r.missing) setStatus(t("updateFailed", [String(r.message || "").slice(-200)]), true);
+  if (r && !r.ok && !r.missing) setRow(t("updateFailed", [String(r.message || "").slice(-200)]), "error");
 });
 document.getElementById("check").addEventListener("click", async (e) => {
   e.preventDefault();
@@ -97,7 +92,7 @@ document.getElementById("check").addEventListener("click", async (e) => {
   const r = await chrome.runtime.sendMessage({ type: "checkUpdate" });
   a.textContent = t("checkUpdates");
   await showUpdate();
-  if (r && r.error) setStatus(t("checkFailed", [r.error]), true);
+  if (r && r.error) setRow(t("checkFailed", [r.error]), "error");
 });
 document.getElementById("options").addEventListener("click", (e) => { e.preventDefault(); chrome.runtime.openOptionsPage(); });
 
