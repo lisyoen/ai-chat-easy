@@ -70,7 +70,7 @@ async function showUpdate() {
   // Compare against the running version every time; a stored flag may be from an older install.
   const newer = A.isNewer(latestVersion, current);
   if (newer) setRow(t("updateAvailable", [latestVersion]), "newer");
-  else if (checkError && !checkedAt) setRow(t("checkFailed", [checkError]), "error");
+  else if (checkError) setRow(t("checkFailed", [checkError]), "error");
   else setRow(t("upToDateVersion", [current]), "latest");
   document.getElementById("helper").hidden = !(newer && helperMissing);
 }
@@ -89,12 +89,12 @@ document.getElementById("check").addEventListener("click", async (e) => {
   e.preventDefault();
   const a = e.currentTarget;
   a.textContent = t("checking");
-  const r = await chrome.runtime.sendMessage({ type: "checkUpdate" });
+  await chrome.runtime.sendMessage({ type: "checkUpdate" });
   a.textContent = t("checkUpdates");
   await showUpdate();
-  if (r && r.error) setRow(t("checkFailed", [r.error]), "error");
 });
 document.getElementById("options").addEventListener("click", (e) => { e.preventDefault(); chrome.runtime.openOptionsPage(); });
 
 render();
-showUpdate();
+// Show the stored state at once, then refresh it from the server so the popup is never stale.
+showUpdate().then(() => chrome.runtime.sendMessage({ type: "checkUpdate" })).then(showUpdate);

@@ -78,7 +78,9 @@ async function runUpdate() {
     await refreshFromStorage();
     return r;
   }
-  if (r.upToDate) {
+  // Files on disk may already be newer than the running code (e.g. a zip unpacked over the
+  // folder without pressing reload). Then the helper has nothing to download, but a reload is due.
+  if (r.upToDate && !(r.mode === "zip" && AICE.isNewer(r.after, currentVersion()))) {
     await checkForUpdate();
     return r;
   }
