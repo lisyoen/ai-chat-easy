@@ -99,6 +99,31 @@ check("source send still happens once", claudeEv.filter((e) => e === "button-sen
 const upd = await sw.evaluate(async () => { await new Promise((r) => setTimeout(r, 500)); return [await chrome.action.getBadgeText({}), await chrome.action.getPopup({}), (await chrome.storage.local.get("latestVersion")).latestVersion]; });
 check("update badge shown and icon click switches to update", upd[0] === "NEW" && upd[1] === "" && upd[2] === "9.9.9", JSON.stringify(upd));
 
+// Extension disabled and enabled again (no onInstalled): open tabs must keep Enter = newline
+// and get a live copy back, so settings apply again without reloading the page.
+const mgr = await ctx.newPage();
+await mgr.goto("chrome://extensions/");
+await mgr.waitForTimeout(800);
+const toggle = mgr.locator("#enableToggle:visible").first();
+await toggle.click(); await mgr.waitForTimeout(800);
+await toggle.click(); await mgr.waitForTimeout(3000);
+await page.bringToFront();
+await page.evaluate(() => { window.events.length = 0; });
+await page.click('[data-testid="chat-input"]');
+await page.keyboard.press("Enter");
+ev = await page.evaluate(() => window.events.slice());
+check("after disable/enable Enter still inserts newline", ev.length === 1 && ev[0] === "newline", JSON.stringify(ev));
+const popup2 = await ctx.newPage();
+await popup2.goto(`chrome-extension://${id}/popup/popup.html`);
+await popup2.waitForTimeout(300);
+await popup2.locator("#tools input[type=checkbox]").first().evaluate((el) => { el.click(); });
+await popup2.waitForTimeout(500);
+await page.bringToFront();
+await page.click('[data-testid="chat-input"]');
+await page.keyboard.press("Enter");
+ev = await page.evaluate(() => window.events.slice());
+check("after disable/enable the tab follows settings again (healed)", ev.at(-1) === "enter-send", JSON.stringify(ev));
+
 await ctx.close();
 const failed = results.filter((r) => !r).length;
 console.log(`${results.length - failed}/${results.length} passed`);

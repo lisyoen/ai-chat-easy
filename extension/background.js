@@ -92,14 +92,30 @@ async function runUpdate() {
   return r;
 }
 
-// Re-inject content scripts into tabs that were open before an install/update.
-async function reinjectContentScripts() {
-  const tabs = await chrome.tabs.query({ url: SITE_PATTERNS });
-  for (const tab of tabs) {
+function withTimeout(promise, ms) {
+  return Promise.race([promise, new Promise((_r, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+}
+
+// Make sure every open chatbot tab has a live copy of the content scripts.
+// Tabs opened before an install, update, reload or disable/enable keep only an orphaned copy
+// (onInstalled does not fire on enable), so ping each tab and inject where nobody answers.
+// Runs whenever the service worker starts, so any gap heals within about a minute.
+let healing = null;
+function healTabs() {
+  if (!healing) healing = doHealTabs().finally(() => { healing = null; });
+  return healing;
+}
+async function doHealTabs() {
+  const tabs = (await chrome.tabs.query({ url: SITE_PATTERNS })).filter((tab) => !tab.discarded);
+  await Promise.allSettled(tabs.map(async (tab) => {
     try {
-      await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: CONTENT_FILES });
-    } catch (_e) { /* tab not ready or not allowed */ }
-  }
+      const r = await withTimeout(chrome.tabs.sendMessage(tab.id, { type: "aice:ping" }), 2000);
+      if (r && r.ok) return;
+    } catch (_e) { /* no live copy */ }
+    try {
+      await withTimeout(chrome.scripting.executeScript({ target: { tabId: tab.id }, files: CONTENT_FILES }), 5000);
+    } catch (_e) { /* tab not ready or not allowed; it gets the scripts on its next load */ }
+  }));
 }
 
 // Broadcast: deliver the prompt to the most recently used tab of each target chatbot
@@ -147,9 +163,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     notify(t("updatedTo", [currentVersion()]));
   }
   await chrome.storage.local.remove("justUpdatedFrom");
-  await reinjectContentScripts();
+  await healTabs();
   await checkForUpdate();
 });
+
+// Every service worker start (install, update, enable, browser start, wake-up by the alarm).
+healTabs();
 
 chrome.runtime.onStartup.addListener(async () => {
   chrome.alarms.create(ALARM, { periodInMinutes: CHECK_MINUTES });

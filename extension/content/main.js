@@ -5,13 +5,17 @@
   const site = A.siteForHost(location.hostname);
   if (!site) return;
 
-  // A newer copy of this script (after an extension update) takes over; the old one goes quiet.
+  // A newer copy of this script (after an extension reload) takes over; the old one goes quiet.
+  // Until then this copy keeps the keyboard tools working even if the extension context is gone
+  // (extension reloaded, or disabled and enabled again): Enter must never silently turn into "send".
   let alive = true;
   window.dispatchEvent(new CustomEvent("aice:takeover"));
   window.addEventListener("aice:takeover", () => { alive = false; }, { once: true });
-  const contextValid = () => {
-    try { return alive && !!chrome.runtime && !!chrome.runtime.id; } catch (_e) { return false; }
+  // chrome.* APIs (settings, broadcast) work only while the extension context is valid.
+  const runtimeOk = () => {
+    try { return !!chrome.runtime && !!chrome.runtime.id; } catch (_e) { return false; }
   };
+  const contextValid = () => alive && runtimeOk();
 
   const t = (k, s) => A.i18n(k, s);
   let cfg = A.merge({}, t);
@@ -64,6 +68,7 @@
     return A.SITES.filter((s) => s.id !== site.id && cfg.broadcast && cfg.broadcast[s.id]).map((s) => s.id);
   }
   function broadcast(editor) {
+    if (!contextValid()) return;
     const targets = broadcastTargets();
     if (!targets.length) return;
     const ed = editor || currentEditor();
@@ -85,7 +90,7 @@
 
   // Native sends: a real click on the site's send button (our own clicks are untrusted and skipped).
   document.addEventListener("click", (e) => {
-    if (!contextValid() || !e.isTrusted || !(e.target instanceof Element)) return;
+    if (!alive || !e.isTrusted || !(e.target instanceof Element)) return;
     if (e.target.closest(site.sendButtons.join(","))) broadcast();
   }, true);
 
@@ -97,7 +102,7 @@
   }
 
   window.addEventListener("keydown", (e) => {
-    if (!contextValid() || A.editor.isSynthetic(e) || A.palette.isOpen()) return;
+    if (!alive || A.editor.isSynthetic(e) || A.palette.isOpen()) return;
 
     const shortcut = A.matchShortcut(e);
     if (shortcut === "palette" && enabled("palette")) {
@@ -126,7 +131,10 @@
   // Delivery from a broadcast started in another chatbot tab.
   try {
     chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-      if (!contextValid() || !msg || msg.type !== "aice:deliver") return false;
+      if (!contextValid() || !msg) return false;
+      // The background checks that every chatbot tab has a live copy of this script.
+      if (msg.type === "aice:ping") { sendResponse({ ok: true }); return false; }
+      if (msg.type !== "aice:deliver") return false;
       A.editor.fillAndSend(site, msg.text).then(sendResponse);
       return true;
     });
